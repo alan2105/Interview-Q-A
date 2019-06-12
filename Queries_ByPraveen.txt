@@ -1,0 +1,564 @@
+﻿1)TO change the column area:-
+alter table test.test1 
+change storage_id storage_id varchar(20) after user_id;
+
+2)TO MODIFY COLUMN :-
+alter table wms.map_layer3 modify maplayer3_id varchar(30) Not null;
+
+alter table  sms.mst_oppurtunintystage alter column  
+winning type varchar(30) ;
+
+3)TO CHANGE CONSTRAINTS:-
+alter table companies DROP PRIMARY KEY,change id id int(11) NOT NULL,
+add PRIMARY KEY(uuid);
+
+4)TO DROP CONSTRAINT :
+alter table wms.map_layer2 drop foreign key(foreign key name) map_layer2_ibfk_1;
+
+5)TO ADD COLUMN:-
+ALTER TABLE contacts ADD email VARCHAR(60) AFTER name;
+
+6)To delete column:-
+ALTER TABLE 'table_things' DROP 'col_stuff';
+
+7)To Rename column:-
+ALTER TABLE `keonics2`.`suplier_site_details` 
+CHANGE COLUMN `sup_name` `sup_namer` VARCHAR(60) NULL DEFAULT NULL ;
+
+8)To drop table having constraints:-
+drop table wms.xxx5 cascade;
+
+9)TO Add primary key after creating of table:-
+ALTER TABLE EMP ADD CONSTRAINT PK_EMP PRIMARY KEY(EMPNO);
+
+10)TO add FOREIGN KEY creating at the time of table creation:-
+ALTER TABLE EMP ADD CONSTRAINT FK_EMP FOREIGN KEY (DEPTNO) REFERENCES DEPT(DEPTNO);
+
+create table public.testseq4(id text not null default ('msv' || nextval('testseq')),deptname varchar(25));
+   
+11)TO INSERT DATA FROM ONE TABLE TO ANOTHER:-
+INSERT INTO new_table SELECT * FROM old_table;
+   
+12)To update data in all row  in single shot:
+update wms1.master_layer2_tb set user_id = 'superuser'  where user_id = 1;
+
+13)To check the table Size in mysql:                   
+SELECT table_name AS 'Table',    
+round(((data_length + index_length) / 1024 / 1024), 4)'DB size in MB' 
+FROM information_schema.TABLES  WHERE table_schema = "wms1" ;
+
+14)If ur getting any error due to foreign key.use this query:-
+
+SET FOREIGN_KEY_CHECKS = 0; 
+truncate table wms1.map_layer3_tb;
+
+SET FOREIGN_KEY_CHECKS = 1;
+
+15)TO Update in Table:
+UPDATE `wms1`.`DamagedStock_tb` SET `damage_matdet_matcode`='101411' WHERE `damage_sno`='3';
+
+16)To Delete in table : 
+DELETE FROM `wms1`.`DamagedStock_tb` WHERE `damage_sno`='6';
+
+17)To Drop Primary Key:
+ALTER TABLE `wms1`.`DamagedStock_tb` 
+CHANGE COLUMN `damage_sno` `damage_sno` INT(11) NULL,
+DROP PRIMARY KEY;
+
+18)To Add Primary Key:
+ALTER TABLE `wms1`.`DamagedStock_tb` 
+DROP PRIMARY KEY,
+ADD PRIMARY KEY (`damage_sno`, `org_id`);
+
+19)To Add Unique Key:
+ALTER TABLE `wms1`.`DamagedStock_tb` 
+ADD UNIQUE INDEX `damage_matdet_matname_UNIQUE` (`damage_matdet_matname` ASC);
+
+20)To Add Column:
+ALTER TABLE `wms1`.`DamagedStock_tb` 
+ADD COLUMN `DamagedStock_tbcol` VARCHAR(45) NULL AFTER `tr_balance_storage`;
+
+21)To Drop Column:
+ALTER TABLE `wms1`.`DamagedStock_tb` 
+DROP COLUMN `damage_balance_storage`;
+
+22)To Change column Datatype:
+ALTER TABLE `wms1`.`DamagedStock_tb` 
+CHANGE COLUMN `damage_date` `damage_date` DATE NULL DEFAULT NULL;
+ 
+23)To Change all column's into uppercase:
+UPDATE table_name SET `column_name` = UPPER( `column_name` );
+
+24) To add a sum of 2 values using 2 queries:
+SELECT SUM(C.TOTAL) AS TOTAL_CREDIT FROM (SELECT SUM(A.price) AS TOTAL FROM TABLE1 A WHERE A.acc_id = '555'
+UNION ALL
+SELECT SUM(B.price) AS TOTAL FROM TABLE2 B WHERE B.account = '555' && B.active='1') C; 
+
+25)To auto increment the value (starts from particular number):-
+ALTER TABLE table_name AUTO_INCREMENT = 532;
+
+26)To autoincrement the value
+alter table table_name identity(1000,1); 
+
+
+27)To set database in utf8:-
+SELECT default_character_set_name FROM information_schema.SCHEMATA
+WHERE schema_name = "training";
+
+SET NAMES 'utf8';
+USE wms1;
+show variables like "character_set_database";
+
+ALTER DATABASE wms1 CHARACTER SET utf8;
+
+28)Delete from single row from particular column :-
+delete from rsi_prizm.auditsurvey_responses where audit_response_id='31' and audit_question_id between '30' and '33';
+
+29)To find only even no in row:
+SELECT * FROM wms1.map_layer2_tb where mod(map_ly2_sno,2)=0;
+To find only even no in row:
+SELECT * FROM wms1.map_layer2_tb where mod(map_ly2_sno,2)=1;
+
+30)safe update query:
+
+set sql_safe_updates=0;
+
+SET SQL_SAFE_UPDATES = 1;
+
+31)To restore through command line:-
+mysql --u [username] --password=[password] [database name] < [dump file]
+
+mysql --user root --password=myrootpassword new_db < db_test.sql
+
+32)Query for restore and backup:-
+backup: # mysqldump -u root -p[root_password] [database_name] > dumpfilename.sql
+
+restore:# mysql -u root -p[root_password] [database_name] < dumpfilename.sql
+
+
+
+mysqldump -u root -p --routines --no-create-info --no-data --no-create-db --skip-opt keonics_erp > /home/ebs/Desktop/pnt_180117.sql -- FOR PROCEDURES & TRIGGERS
+
+
+
+mysqldump -u root -p --events --no-create-info --no-data --no-create-db --skip-opt --skip-triggers keonics_erp > /home/ebs/Desktop/event_180117.sql --FOR EVENTS
+
+
+Query to take only Procedure and Trigger
+mysqldump -u root -p keonics_erp --routines --no-create-info --no-data 
+--no-create-db --skip-opt >/home/ebs/Desktop/backup/pro_trig180117.sql
+
+Query to take only Procedure 
+mysqldump -u root -p keonics_erp --routines --no-create-info --no-data --no-create-db
+ --skip-triggers --skip-opt >/home/ebs/Desktop/backup/probbb180117.sql
+
+Query to take only Events
+mysqldump -u root -p --events --no-create-info --no-data --no-create-db
+ --skip-opt --skip-triggers keonics_erp > /home/ebs/Desktop/event_180117.sql 
+
+33)Steps for auto backup in mysql:
+
+step 1:To create .sh file
+ vim /home/ebs-dbd01/Desktop/dump.sh
+
+step 2: TO type script tat will take backup of database with current date&time
+
+#!/bin/sh
+mysqldump -u root -p root wms1 > /home/ebs-dbd01/Desktop/backup/backup`date +%F_%T`.sql
+
+The second line is dumping a databsase from a remote host.
+mysqldump -h 172.16.21.3 -u root -pmysql123 –all-databases –routines | gzip > /root/MySQLDB.3_`date ‘+%m-%d-%Y’`.sql.gz
+
+In above two lines, I’m scheduling the cron job to dump my database on the same machine, also the second line is dumping a databsase from a remote host.
+You need to provide access to the local system on the remote host to perform the task.
+
+step 3: 
+chmod u+x  /home/ebs-dbd01/Desktop/dump.sh
+
+step 4:
+./home/ebs-dbd01/Desktop/dump.sh
+
+step 5:
+Go as  root user,
+vim /etc/crontab
+40 10 * * * root /home/ebs-dbd01/Desktop/dump.sh2>&1>> /root/MySQLdump.log
+
+step 6:
+To delete files older than 1 week:
+find /home/users/backup_MyDB -type f -mtime +7 -exec rm {} +
+
+step 7:
+Although generally it is wise to see what you are deleting before you delete (at least when testing you script) for this just do:
+find /home/users/backup_MyDB -type f -mtime +7
+
+
+34)To change ownership if its in locked:
+ chmod 777 -R /home/ebs-dbd01/Desktop/backup/
+
+
+35)subqueries:
+a)SELECT customerNumber,
+       checkNumber,
+    amount
+FROM payments
+WHERE amount > (
+ SELECT AVG(amount) 
+    FROM payments);
+
+b)SELECT customerNumber,
+       checkNumber,
+       amount
+FROM payments
+WHERE amount = (
+ SELECT MAX(amount) 
+        FROM payments
+);
+
+36)When Table Doesn't exist (or If anyone deleted mysql,Performance_schema acciendently)
+
+step 1:sudo dpkg-reconfigure mysql-server-5.5
+step 2:mysql check --all--database --check -upgrade --auto-repair
+step 3:mysql_upgrade -u -p --force
+
+
+37)Query to concat if it have two different value in one column
+Mysql:
+SELECT
+Record_No,
+ GROUP_CONCAT(item_id, '')
+FROM
+purchase_order
+group by Record_No;
+
+Postgres:
+SELECT
+ string_agg(name, ',')
+FROM
+ebsindia.mom_participants;
+
+
+38)
+a)To check all database size in mysql:
+size in MB:
+SELECT table_schema "database", sum(data_length + index_length)/1024/1024 "size in MB" 
+FROM information_schema.TABLES GROUP BY table_schema;
+
+size in GB:
+
+SELECT table_schema "database", sum(data_length + index_length)/1024/1024/1024 "size in GB" 
+FROM information_schema.TABLES GROUP BY table_schema;
+
+b)To check single database size in mb/gb mysql :
+SELECT table_schema "Database Name", SUM( data_length + index_length)/1024/1024
+"Database Size (MB)" FROM information_schema.TABLES where table_schema = 'mydb';
+
+SELECT  SUM(ROUND(((DATA_LENGTH + INDEX_LENGTH) / 1024 / 1024 /1024 ), 2))  AS SIZEGB
+FROM INFORMATION_SCHEMA.TABLES
+WHERE TABLE_SCHEMA = 'usbn';
+
+
+c)To check table size in mysql:
+SELECT table_name, round(((data_length + index_length) / (1024*1024)),2) as "size in megs" 
+FROM information_schema.tables WHERE table_schema = "named_db"; 
+
+
+d)To check schema size,tablename ,table row:-
+select table_schema, table_name, table_rows, data_length, index_length,
+round(sum(data_length + index_length)/1024/1024,2) AS "Size in MB"
+from information_schema.TABLES where table_schema = "keonics"
+GROUP BY table_schema, table_name;
+
+
+39) To check database in postgres:
+SELECT pg_database_size('named_db');
+SELECT pg_size_pretty(pg_database_size('named_db'));
+
+
+
+36) To grant privileges for your db from other server:
+
+grant all on *.* to 'root'@'ipaddress';
+
+revoke all privileges,grant option from 'root'@'192.168.1.77';
+
+step 1:-
+ SELECT CURRENT_USER();     
++----------------+
+| CURRENT_USER() |
++----------------+
+| root@localhost |
++----------------+
+
+step 2:-
+mysql> GRANT ALL PRIVILEGES ON *.* TO 'myNewUser'@'remoteIP'; 
+ 	GRANT ALL PRIVILEGES ON demodb.* TO 'demou'@'219.91.219.14' identified by 'password' with grant option;
+
+
+step 3:-
+mysql> FLUSH PRIVILEGES;
+Query OK, 0 rows affected (0.00 sec)
+
+step 4:-
+mysql> SHOW GRANTS;
+
+37) update query :-
+
+update tablename set columnname='null' where s_no between '100' to '127';
+
+
+38)Change a Password for MySQL on Linux via Command Line:-
+ 1)mysql -u root -p
+2)update user set password=PASSWORD('your_new_password') where User='root';
+
+
+39) queries
+current Month:-
+SELECT * FROM jokes WHERE YEAR(date) = YEAR(NOW()) AND MONTH(date)=MONTH(NOW());
+current weak:-
+SELECT * FROM jokes WHERE WEEKOFYEAR(date) = WEEKOFYEAR(NOW());
+Current day:
+SELECT * FROM jokes WHERE YEAR(date) = YEAR(NOW()) AND MONTH(date) = MONTH(NOW()) AND DAY(date) = DAY(NOW());
+
+40)query to do sum of two employee:
+select a.emp_code,a.policy_prsn_name,a.policy_no,a.amt_deducted,b.total from
+(select emp_code,policy_prsn_name,policy_no,amt_deducted 
+from bwssb.tr_savingsinvest where  month(lastmodified_date)='4'
+order by emp_code)a
+left join
+(select emp_code,sum(amt_deducted) as total from bwssb.tr_savingsinvest where 
+month(lastmodified_date)='4' group by emp_code)b
+on a.emp_code=b.emp_code;
+
+41)script for finding 2nd and 4th saturday:
+
+SELECT date AS first_day_of_month,
+ DATE_ADD(date, INTERVAL( ( 14 - DAYOFWEEK(date) ) % 7 ) + 7 DAY) 
+AS second_saturday_of_month, 
+DAYNAME(DATE_ADD(date, INTERVAL( ( 14 - DAYOFWEEK(date) ) % 7 ) + 7 DAY)) as 2ndsatur,
+(DATE_ADD(date, INTERVAL( ( 14 - DAYOFWEEK(date) ) % 7 ) + 21 DAY)) as 4ndsatur,
+DAYNAME(DATE_ADD(date, INTERVAL( ( 14 - DAYOFWEEK(date) ) % 7 ) + 7 DAY)) as 4satur,
+(DATE_ADD(date, INTERVAL( ( 15 - DAYOFWEEK(date) ) % 7 ) + 21 DAY)) as sunday,
+DAYNAME(DATE_ADD(date, INTERVAL( ( 15 - DAYOFWEEK(date) ) % 7 ) + 7 DAY)) as sunday
+ FROM mst_hrms_holidaylist;
+
+
+42)
+To increase user connections size:
+SHOW VARIABLES LIKE "max_connections";
+SHOW GLOBAL STATUS LIKE 'max_use%';
+SHOW GLOBAL VARIABLES LIKE 'max_user_connections';
+GRANT USAGE ON *.* TO 'repl'@'%'
+WITH MAX_CONNECTIONS_PER_HOUR 100 MAX_USER_CONNECTIONS 10;
+SELECT User, Host, max_connections, max_user_connections
+  FROM mysql.user;
+SET max_allowed_packet=32*1024*1024;
+
+43)To change column datatype in Postgres:
+alter table a.attend alter column terminal TYPE INTEGER  USING (terminal::integer) ;
+
+
+44)To see index available in Tables:
+show index from <table name>
+
+
+45)To find duplicate records with comparing two tables: 
+select item_code from (SELECT item_code, count(*)
+FROM newitemdetails
+GROUP BY item_code
+HAVING count(*) > 1) t limit 1;
+
+
+SELECT a.*
+FROM users a
+JOIN (SELECT username, email, COUNT(*)
+FROM users 
+GROUP BY username, email
+HAVING count(*) > 1 ) b
+ON a.username = b.username
+AND a.email = b.email
+ORDER BY a.email
+
+46)To delete  duplicate records while comparing both tables: 
+
+delete from newitemdetails where item_code=(select item_code from (SELECT item_code, count(*)
+FROM newitemdetails
+GROUP BY item_code
+HAVING count(*) > 1) t OFFSET 1 limit 1) and org_id='2';
+
+
+
+
+47)In MySQL 5.7, the default cnf is at:
+
+/etc/mysql/mysql.conf.d/mysqld.cnf
+
+48)Sequence in postgres:
+
+ALTER SEQUENCE exciseautomation.brandmaster_s_no_seq RESTART WITH 1;
+
+
+49) UPDATE bwssb.tr_emptransfer a
+INNER JOIN
+bwssb.emp_details b
+    ON a.emp_code = b.emp_code
+SET a.emp_no = b.emp_no
+
+
+Training query
+
+UPDATE training.studentsdetails_tb a
+INNER JOIN
+training.students_details1 b
+    ON a.registration_number = b.registration_number
+SET a.grade = b.grade
+
+
+50)Exporting only Table structure without data in postgresql:
+
+COPY (select * from table_name where false)  -- To return result without rows
+ TO 'D:\File.csv' DELIMITER ',' CSV HEADER;
+
+Import Excel file in postgresql
+
+copy public."Panel" FROM 'E:\panel310718.csv' DELIMITER ',' CSV HEADER;
+copy table name FROM 'path of Excel file location' DELIMITER ',' CSV HEADER;
+
+
+copy public."Panel" FROM 'E:\panel310718.csv' DELIMITER ',' CSV HEADER;
+copy table name FROM 'path of Excel file location' DELIMITER ',' CSV HEADER;
+
+51)
+set global sql_mode='STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,
+​ERROR_FOR_DIVISION_BY‌​_ZERO,NO_AUTO_CREATE‌​_USER,NO_ENGINE_SUBS‌​TITUTION';
+
+52)
+@C:\Users\EBS02\Desktop\ajh_prod.sql
+
+
+53) meterid query
+select * from (
+
+select rm.meterid as meterid,rm.instantFlowRate,rm.latestValue ,rm.dataReceivedTime,
+sum(rm.instantFlowRate) flowrate,loc.locationName,loc.locationId
+FROM bwssbnew.RawMeterData rm 
+inner join bwssbnew.Meter mt 
+on rm.meterid =mt.meterid
+join bwssbnew.Location loc 
+on mt.locationid=loc.locationid
+where  -- rm.instantFlowRate=0 and 
+date(rm.dataReceivedTime)='2018-05-30'
+-- and rm.meterid='E2_001
+group by rm.meterid
+
+
+)a 
+where flowrate=0
+order by a.meterid
+
+
+
+54)
+
+show events;
+SET GLOBAL event_scheduler = ON;
+SHOW VARIABLES WHERE VARIABLE_NAME = 'event_scheduler';
+show create event update_flat_vacat_status;
+
+55)
+SELECT 
+    TABLE_NAME, 
+    TABLE_ROWS 
+FROM 
+    `information_schema`.`tables` 
+WHERE 
+    `table_schema` = 'usbn';
+
+
+56) SELECT * from tasks
+INTO OUTFILE 'C:/ProgramData/MySQL/MySQL Server 5.6/Uploads/d3.csv'  
+FIELDS TERMINATED BY ','
+LINES TERMINATED BY '\n'
+
+
+57) SELECT User,Host FROM mysql.user;
+
+
+create user 'devjav' identified by 'jvdev!46';
+grant create,select,insert,update,delete  on cawm.* to 'devjav'@'59.144.5.174'   identified by 'jvdev!46' with grant option;
+
+grant create,select,insert,update,delete  on cawm.* to 'devjav'@'%'   identified by 'jvdev!46' with grant option;
+
+
+
+
+58)
+create user 'devjav' identified by 'jvdev!46';
+grant create,select,insert,update,delete  on cwam.* to 'devjav'@'106.51.64.122'   identified by 'jvdev!46' with grant option;
+grant create,select,insert,update,delete  on cwam.* to 'devjav'@'59.144.5.161'   identified by 'jvdev!46' with grant option;
+grant create,select,insert,update,delete  on cwam.* to 'devjav'@'59.144.5.174'   identified by 'jvdev!46' with grant option;
+
+grant create,select,insert,update,delete  on cwam.* to 'devjav'@'%'   identified by 'jvdev!46' with grant option;
+
+
+
+create user 'uidesign' identified by 'ui!456';
+grant create,select,insert,update,delete  on cwam.* to 'uidesign'@'106.51.64.122'   identified by 'ui!456' with grant option;
+grant create,select,insert,update,delete  on cwam.* to 'uidesign'@'59.144.5.161'   identified by 'ui!456' with grant option;
+grant create,select,insert,update,delete  on cwam.* to 'uidesign'@'59.144.5.174'   identified by 'ui!456' with grant option;
+
+
+create user 'devnet' identified by 'dev!46';
+grant create,select,insert,update,delete  on cwam.* to 'devnet'@'106.51.64.122'   identified by 'dev!46' with grant option;
+grant create,select,insert,update,delete  on cwam.* to 'devnet'@'59.144.5.161'   identified by 'dev!46' with grant option;
+grant create,select,insert,update,delete  on cwam.* to 'devnet'@'59.144.5.174'   identified by 'dev!46' with grant option;
+grant create,select,insert,update,delete  on cwam.* to 'devnet'@'%'   identified by 'dev!46' with grant option;
+
+59)To install pg_agent in windows:
+
+C:\Program Files\PostgreSQL\9.6\bin\applicationstackbuilder.exe
+
+60)count of insert,update
+
+select object_schema,object_name,count_insert,count_update,COUNT_DELETE 
+ from performance_schema.table_io_waits_summary_by_table where object_schema='cwam'
+ ;
+
+61) Find a total size of the database.
+1 SELECT pg_size_pretty(pg_database_size('db_employee'));
+62) Find a total size of the table with an index.
+SELECT pg_size_pretty(pg_total_relation_size('Employee_Table'));63) Find a total size of the table without an index.
+SELECT pg_size_pretty(pg_relation_size('Employee_table'));64) Find a total size of the index.
+SELECT pg_size_pretty(pg_indexes_size('index_empid')); 65) Find a total number of rows in a table.
+SELECT COUNT(1) FROM Employee_table; 66) Find all the table size in the current database.
+
+
+
+
+
+SELECT
+    table_schema || '.' || table_name AS TableName,
+    pg_size_pretty(pg_total_relation_size('"' || table_schema || '"."' || table_name || '"')) AS TableSize
+FROM information_schema.tables
+ORDER BY
+    pg_total_relation_size('"' || table_schema || '"."' || table_name || '"') DESC 67) Find all the table and index size in the current database.
+
+
+
+
+
+
+
+
+
+
+SELECT
+    TableName
+    ,pg_size_pretty(pg_table_size(TableName)) AS TableSize
+    ,pg_size_pretty(pg_indexes_size(TableName)) AS IndexSize
+    ,pg_size_pretty(pg_total_relation_size(TableName)) AS TotalSize
+FROM 
+(
+     SELECT ('"' || table_schema || '"."' || table_name || '"') AS TableName
+     FROM information_schema.tables
+) AS Tables
+ORDER BY 4 DESC
